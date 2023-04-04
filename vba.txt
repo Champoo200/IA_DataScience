@@ -1,0 +1,176 @@
+Option Explicit
+Dim nArchivo As Integer, Conteo As Integer, i As Integer, j As Integer, n As Integer
+Sub ImportarData()
+
+Call ContarArchivos
+   
+Application.ScreenUpdating = False
+Application.Calculation = xlCalculationManual
+Dim WorkBookOrigen As Workbook
+    Dim wsOrigen As Excel.Worksheet, _
+    wsDestino As Excel.Worksheet, _
+    rngOrigen As Excel.Range, _
+    rngDestino As Excel.Range, _
+    NombreArchivo As String, _
+    Carpeta As String
+    Carpeta = ActiveWorkbook.Path & "\"
+    Dim pos As Long
+    Dim var(11) As String
+    Dim y As Integer
+nArchivo = 1
+
+NombreArchivo = Dir(Carpeta & "3ME0" & "*.xl*")
+
+
+Do While Len(NombreArchivo) > 0
+
+
+        Set WorkBookOrigen = Workbooks.Open(Carpeta & NombreArchivo)
+            NombreArchivo = Dir()
+            
+        ThisWorkbook.Activate
+            
+        Set wsOrigen = WorkBookOrigen.Worksheets(1)
+        Set wsDestino = Worksheets(1)
+        
+        Const celdaOrigen = "A1"
+        
+        Set rngOrigen = wsOrigen.Range(celdaOrigen)
+        
+        wsOrigen.Activate
+
+        Sheets("WH1").Select
+        pos = nReg(Hoja1, 1, 1)
+      
+        
+        var(0) = Range("B1")
+        'wsDestino.Range("A" & pos).PasteSpecial
+        
+        var(1) = Range("B2")
+        'wsDestino.Cells(pos, 2).PasteSpecial
+        
+        var(2) = Range("B9")
+        'wsDestino.Cells(pos, 3).PasteSpecial
+
+        var(3) = Range("B10")
+        'wsDestino.Cells(pos, 4).PasteSpecial
+
+        var(4) = Range("B14")
+        'wsDestino.Cells(pos, 5).PasteSpecial
+        
+        var(5) = Range("B15")
+        'wsDestino.Cells(pos, 6).PasteSpecial
+        
+        var(6) = Range("B19")
+        'wsDestino.Cells(pos, 7).PasteSpecial
+        
+        var(7) = Range("B20")
+        'wsDestino.Cells(pos, 8).PasteSpecial
+        
+        var(8) = Range("B24")
+        'wsDestino.Cells(pos, 9).PasteSpecial
+        
+        var(9) = Sheets("WH1").Range("B25")
+        'wsDestino.Cells(pos, 10).PasteSpecial
+        
+        var(10) = Sheets("WH1").Range("B29")
+        'wsDestino.Cells(pos, 11).PasteSpecial
+        
+        var(11) = Sheets("WH1").Range("B30")
+        'wsDestino.Cells(pos, 12).PasteSpecial
+        
+        wsDestino.Activate
+        Sheets("Destino").Select
+        For i = 0 To 11
+            y = i + 1
+            Sheets("Destino").Cells(pos, y).Value = var(i)
+        Next
+        
+        'rngOrigen.Select
+        'Range(Selection, Selection.End(xlDown)).Select
+        'Range(Selection, Selection.End(xlToRight)).Select
+        'Selection.Copy
+        
+'Errores:
+'        If Err.Number = 1004 Then
+'            wsOrigen.Activate
+'            rngOrigen.Select
+'            Range(Selection, Selection.End(xlToRight)).Select
+'            Selection.Copy
+'        End If
+        
+'            For n = 1 To 1
+'            wsDestino.Activate
+
+'On Error GoTo Errores
+
+
+
+
+
+                'wsDestino.Cells(Columns.Count, 2).End(xlUp).Offset(1, 0).PasteSpecial xlPasteValues
+            'Next n
+            'Application.CutCopyMode = False
+        WorkBookOrigen.Save
+        WorkBookOrigen.Close
+        
+        nArchivo = nArchivo + 1
+    Call Progreso
+                    
+
+Loop
+
+j = nArchivo - 1
+
+
+Application.ScreenUpdating = True
+
+
+MsgBox j & " Archivos procesados"
+
+End Sub
+
+
+
+
+
+
+
+
+Public Sub Progreso()
+Dim Contador As Integer
+Dim Maximo As Integer
+Dim Mitiempo As Double
+
+
+
+Maximo = nArchivo - 1
+ 
+For Contador = 1 To Maximo Step 1
+    Mitiempo = Timer
+    Do
+        Loop While Timer - Mitiempo < 0.02
+        Application.StatusBar = "Progreso: " & Maximo & _
+        " de " & i & " (" & Format(Maximo / i, "Percent") & ")"
+    DoEvents
+Next Contador
+ 
+Application.StatusBar = False
+End Sub
+Public Sub ContarArchivos()
+Dim cNombreArchivo, cCarpeta As String
+
+
+cCarpeta = ActiveWorkbook.Path & "\"
+
+Conteo = 1
+
+cNombreArchivo = Dir(cCarpeta & "3ME0" & "*.xl*")
+
+Do While Len(cNombreArchivo) > 0
+    cNombreArchivo = Dir()
+    Conteo = Conteo + 1
+Loop
+
+i = Conteo - 1
+End Sub
